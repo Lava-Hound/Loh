@@ -1,0 +1,55 @@
+public partial class vhod : Page
+    {
+        DB.group363_06Entities connection = new DB.group363_06Entities();
+        public string Klient;
+        public vhod()
+        {
+            InitializeComponent();
+            UpdateRoles();
+        }
+        private void UpdateRoles()
+        {
+            foreach (DB.Roles r in connection.Roles.ToList())
+            {
+                RoleBox.Items.Add(r.Name);
+            }
+        }
+        private void Click_Vhod(object sender, RoutedEventArgs e)
+        {
+            if (RoleBox.SelectedIndex != -1)
+            {
+                string rolename = textBoxLoginAuth.Text;
+                string rolePassword = PasswordBoxauth.Password;
+                if (rolePassword.Length != 0)
+                {
+                    DB.Employee basa = (DB.Employee)connection.Employee.Where(a => a.Phone == rolename && a.Password == rolePassword).FirstOrDefault();
+                    if (basa == null)
+                    {
+                        MessageBox.Show("Логин или пароль неверный");
+                        return;
+                    }
+                    else
+                    {
+                        if (rolename == "Клиент")
+                            if (rolename == "Кассир")
+                                if (rolename == "Повар")
+                                    MessageBox.Show("Добро пожаловать");
+                        MyFrame.Content = new klient();
+                        MyFrame.Content = new povar();
+                        MyFrame.Content = new kassir();
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Введите пароль");
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выберите роль");
+                return;
+            }
+        }
+    }
